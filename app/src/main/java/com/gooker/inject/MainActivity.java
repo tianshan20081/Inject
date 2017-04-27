@@ -36,7 +36,7 @@ public class MainActivity extends Activity {
 //    }
 
     @OnClickInject({R.id.tv_hello, R.id.tv_test})
-    public void testClick(View viewR) {
+    public void testClick(View view) {
         if (null != tv_hello) {
             tv_hello.setText("hello:\t testLong" + System.nanoTime() + ":\tViewId");
         }

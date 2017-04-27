@@ -5,7 +5,7 @@ package com.gooker.injectutils;
  * Created by : mz on 2017/4/27 16:44.
  */
 
-public @interface CastielEventBase {
+public @interface EventBase {
 
     String listenerSetter();
 

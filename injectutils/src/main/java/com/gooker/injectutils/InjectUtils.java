@@ -4,11 +4,14 @@ import android.app.Activity;
 import android.util.Log;
 import android.view.View;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -26,7 +29,8 @@ public class InjectUtils {
         injectContentView(activity);
         injectViews(activity);
 //        injectViewEvent(activity);
-        injectViewEvent2(activity);
+//        injectViewEvent2(activity);
+        injectViewEvent3(activity);
     }
 
     private static void injectViewEvent(final Activity activity) {
@@ -87,6 +91,50 @@ public class InjectUtils {
                     } catch (NoSuchMethodException e) {
                         e.printStackTrace();
                     }
+                }
+            }
+        }
+    }
+
+    private static void injectViewEvent3(final Activity activity) {
+        final Class<? extends Activity> clazz = activity.getClass();
+        Method[] methods = clazz.getDeclaredMethods();
+        for (Method method : methods) {
+            method.setAccessible(true);
+            Annotation[] annotations = method.getAnnotations();
+            for (Annotation annotation : annotations) {
+                Class<? extends Annotation> annotationType = annotation.annotationType();
+                if (!(annotation instanceof CastielOnClickInject)) {
+                    return;
+                }
+                CastielEventBase castielEventBase = annotationType.getAnnotation(CastielEventBase.class);
+
+                String callbackMethod = castielEventBase.callbackMethod();
+                String listenerSetter = castielEventBase.listenerSetter();
+                Class<?> listenerType = castielEventBase.listenerType();
+
+                try {
+                    Method declaredMethod = annotationType.getDeclaredMethod("value");
+                    int[] viewIds = (int[]) declaredMethod.invoke(annotation);
+                    for (int viewId : viewIds) {
+                        if (viewId < 0) {
+                            return;
+                        }
+                        View view = activity.findViewById(viewId);
+
+                        Method setListenerMethod = view.getClass().getMethod(listenerSetter, listenerType);
+                        Map<String, Method> methodMap = new HashMap<>();
+                        methodMap.put(callbackMethod, method);
+                        InvocationHandler invocationHandler = new ListenerInvocationHandler(activity, methodMap);
+                        Object newProxyInstance = Proxy.newProxyInstance(listenerType.getClassLoader(), new Class<?>[]{listenerType}, invocationHandler);
+                        setListenerMethod.invoke(view, newProxyInstance);
+                    }
+                } catch (NoSuchMethodException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (InvocationTargetException e) {
+                    e.printStackTrace();
                 }
             }
 
@@ -154,6 +202,28 @@ public class InjectUtils {
         @Override
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
             return this.method.invoke(target, args);
+        }
+    }
+
+    private static class ListenerInvocationHandler implements InvocationHandler {
+        private Map<String, Method> mMethodMap = null;
+        private Object mObject = null;
+
+        public ListenerInvocationHandler(Object o, Map<String, Method> methodMap) {
+            this.mObject = o;
+            this.mMethodMap = methodMap;
+            Log.i("castiel", "打印方法Map：" + methodMap.toString());
+        }
+
+        @Override
+        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+            String methodName = method.getName();
+            Log.i("castiel", "打印方法name：" + methodName);
+            Method mtd = mMethodMap.get(methodName);
+            if (null != mtd) {
+                return mtd.invoke(this.mObject, args);
+            }
+            return method.invoke(this.mObject, args);
         }
     }
 }

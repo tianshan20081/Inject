@@ -2,6 +2,7 @@ package com.gooker.inject;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,7 +36,7 @@ public class MainActivity extends Activity {
 //    }
 
     @OnClickInject({R.id.tv_hello, R.id.tv_test})
-    public void testClick() {
+    public void testClick(View view) {
         if (null != tv_hello) {
             tv_hello.setText("hello:\t testLong" + System.nanoTime() + ":\tViewId");
         }

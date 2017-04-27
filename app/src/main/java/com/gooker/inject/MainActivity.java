@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.gooker.injectutils.InjectUtils;
 import com.gooker.injectutils.InjectView;
@@ -17,11 +18,12 @@ public class MainActivity extends Activity {
     TextView tv_hello;
 
 
-    @OnClick(R.id.tv_hello)
-    void test(View view) {
+    @OnClick({R.id.tv_hello, R.id.tv_test})
+    private void test(View view) {
         if (null != tv_hello) {
-            tv_hello.setText("hello" + System.nanoTime());
+            tv_hello.setText("hello" + System.nanoTime() + ":\tViewId" + view.getId());
         }
+        Toast.makeText(MainActivity.this, "hello" + System.nanoTime() + ":\tViewId" + view.getId(), Toast.LENGTH_LONG).show();
     }
 
 

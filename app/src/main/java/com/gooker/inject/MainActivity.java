@@ -6,11 +6,9 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.gooker.injectutils.CastielOnClickInject;
 import com.gooker.injectutils.InjectUtils;
 import com.gooker.injectutils.InjectView;
-import com.gooker.injectutils.OnClick;
-import com.gooker.injectutils.OnLongClick;
+import com.gooker.injectutils.OnClickInject;
 import com.gooker.injectutils.SetContentViewId;
 import com.gooker.modelone.action.TestAction;
 import com.gooker.router.annotation.Action;
@@ -39,8 +37,8 @@ public class MainActivity extends Activity {
 //        Toast.makeText(MainActivity.this, "hello:\ttestLong" + System.nanoTime() + ":\tViewId" + view.getId(), Toast.LENGTH_LONG).show();
 //    }
 
-    @CastielOnClickInject({R.id.tv_hello, R.id.tv_test})
-    public void testClick() {
+    @OnClickInject({R.id.tv_hello, R.id.tv_test})
+    public void testClick(View view) {
         if (null != tv_hello) {
             tv_hello.setText("hello:\t testLong" + System.nanoTime() + ":\tViewId");
         }

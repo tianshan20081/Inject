@@ -11,7 +11,6 @@ import com.gooker.injectutils.InjectView;
 import com.gooker.injectutils.OnClickInject;
 import com.gooker.injectutils.SetContentViewId;
 import com.gooker.modelone.action.TestAction;
-import com.gooker.router.annotation.Action;
 
 @SetContentViewId(R.layout.activity_main)
 public class MainActivity extends Activity {

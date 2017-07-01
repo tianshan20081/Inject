@@ -1,12 +1,11 @@
 apply plugin: 'java-library'
 
 dependencies {
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.google.auto.service:auto-service:1.0-rc3'
     compile project(':router')
     compile 'com.squareup:javapoet:1.7.0'
 }
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
-
+sourceCompatibility = "1.8"
+targetCompatibility = "1.8"

@@ -1,1 +1,1 @@
-include ':app', ':injectutils'
+include ':app', ':injectutils', ':router', ':modelone', ':RouterCompiler'

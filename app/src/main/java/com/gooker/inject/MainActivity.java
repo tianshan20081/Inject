@@ -12,6 +12,8 @@ import com.gooker.injectutils.InjectView;
 import com.gooker.injectutils.OnClick;
 import com.gooker.injectutils.OnLongClick;
 import com.gooker.injectutils.SetContentViewId;
+import com.gooker.modelone.action.TestAction;
+import com.gooker.router.annotation.Action;
 
 @SetContentViewId(R.layout.activity_main)
 public class MainActivity extends Activity {
@@ -50,6 +52,11 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         InjectUtils.inject(this);
 
+
+        TestAction ta = new TestAction();
+        System.err.println("====================================================================================================");
+        System.err.println(ta.test());
+        System.err.println("====================================================================================================");
 //        findViewById(R.id.tv_hello).setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {

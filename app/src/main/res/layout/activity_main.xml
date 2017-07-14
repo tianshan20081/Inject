@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="20dp"
-    >
+    android:padding="20dp">
 
     <TextView
         android:id="@+id/tv_hello"
@@ -17,10 +16,29 @@
 
     <TextView
         android:id="@+id/tv_test"
-
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="20dp"
         android:text="Hello World!"/>
+
+    <Button
+        android:id="@+id/btn_add_tag"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add tag"/>
+
+    <Button
+        android:id="@+id/btn_clear_tag"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Clear tag"/>
+
+
+    <com.gooker.tagview.TagLayout
+        android:id="@+id/tl_tags"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        android:background="@android:color/white"/>
 
 </LinearLayout>

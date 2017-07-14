@@ -11,12 +11,16 @@ import com.gooker.injectutils.InjectView;
 import com.gooker.injectutils.OnClickInject;
 import com.gooker.injectutils.SetContentViewId;
 import com.gooker.modelone.action.TestAction;
+import com.gooker.tagview.TagLayout;
 
 @SetContentViewId(R.layout.activity_main)
 public class MainActivity extends Activity {
 
     @InjectView(R.id.tv_hello)
     TextView tv_hello;
+
+    @InjectView(R.id.tl_tags)
+    TagLayout tlTags;
 
 
 //    @OnClick({R.id.tv_hello, R.id.tv_test})
@@ -44,6 +48,17 @@ public class MainActivity extends Activity {
         Toast.makeText(MainActivity.this, "hello:\ttestLong" + System.nanoTime() + ":\tViewId", Toast.LENGTH_LONG).show();
     }
 
+    @OnClickInject(R.id.btn_add_tag)
+    void addTag(View view) {
+        tlTags.addTags();
+    }
+
+
+    @OnClickInject(R.id.btn_clear_tag)
+    void clearTags(View view) {
+        tlTags.clearTags();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,5 +76,7 @@ public class MainActivity extends Activity {
 //
 //            }
 //        });
+
+
     }
 }

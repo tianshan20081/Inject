@@ -104,14 +104,14 @@ public class InjectUtils {
             Annotation[] annotations = method.getAnnotations();
             for (Annotation annotation : annotations) {
                 Class<? extends Annotation> annotationType = annotation.annotationType();
-                if (!(annotation instanceof CastielOnClickInject)) {
+                if (!(annotation instanceof OnClickInject)) {
                     return;
                 }
-                CastielEventBase castielEventBase = annotationType.getAnnotation(CastielEventBase.class);
+                EventBase eventBase = annotationType.getAnnotation(EventBase.class);
 
-                String callbackMethod = castielEventBase.callbackMethod();
-                String listenerSetter = castielEventBase.listenerSetter();
-                Class<?> listenerType = castielEventBase.listenerType();
+                String callbackMethod = eventBase.callbackMethod();
+                String listenerSetter = eventBase.listenerSetter();
+                Class<?> listenerType = eventBase.listenerType();
 
                 try {
                     Method declaredMethod = annotationType.getDeclaredMethod("value");
@@ -221,6 +221,13 @@ public class InjectUtils {
             Log.i("castiel", "打印方法name：" + methodName);
             Method mtd = mMethodMap.get(methodName);
             if (null != mtd) {
+                Log.e(TAG, mtd.getName());
+                if (null != args) {
+                    Log.e(TAG, args.length + "" + args);
+                } else {
+                    Log.e(TAG, "args == null");
+                }
+
                 return mtd.invoke(this.mObject, args);
             }
             return method.invoke(this.mObject, args);

@@ -21,9 +21,15 @@ public class RemoteStatService extends Service {
         public void upload(String content) throws RemoteException {
 
         }
+
+        @Override
+        public void saveData(String content) throws RemoteException {
+
+        }
     };
 
     public RemoteStatService() {
+
     }
 
     @Override

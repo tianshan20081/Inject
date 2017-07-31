@@ -12,5 +12,6 @@ interface IStatServcie {
             double aDouble, String aString);
 
             void upload(String content);
+            void saveData(String content);
 
 }

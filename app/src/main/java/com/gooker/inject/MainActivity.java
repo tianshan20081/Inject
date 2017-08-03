@@ -12,6 +12,7 @@ import com.gooker.injectutils.OnClickInject;
 import com.gooker.injectutils.SetContentViewId;
 import com.gooker.modelone.action.TestAction;
 import com.gooker.router.annotation.Action;
+import com.gooker.stat.event.AppEvent;
 
 @SetContentViewId(R.layout.activity_main)
 public class MainActivity extends Activity {
@@ -37,7 +38,7 @@ public class MainActivity extends Activity {
 //        Toast.makeText(MainActivity.this, "hello:\ttestLong" + System.nanoTime() + ":\tViewId" + view.getId(), Toast.LENGTH_LONG).show();
 //    }
 
-    @OnClickInject({R.id.tv_hello, R.id.tv_test})
+    @OnClickInject({R.id.tv_hello})
     public void testClick(View view) {
         if (null != tv_hello) {
             tv_hello.setText("hello:\t testLong" + System.nanoTime() + ":\tViewId");
@@ -63,4 +64,23 @@ public class MainActivity extends Activity {
 //            }
 //        });
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        AppEvent.onResume(this);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        AppEvent.onStart(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        AppEvent.onStop(this);
+    }
 }
+

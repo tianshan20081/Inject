@@ -13,6 +13,10 @@ buildscript {
     }
 }
 
+ext.deps = [
+        logger: 'com.orhanobut:logger:2.1.1',
+]
+
 allprojects {
     repositories {
         mavenCentral()

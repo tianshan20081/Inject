@@ -4,9 +4,10 @@
 
     <application>
         <service
-            android:name=".StatService"
+            android:name=".service.RemoteStatService"
             android:enabled="true"
-            android:exported="true">
+            android:exported="true"
+            android:process=":stat">
         </service>
     </application>
 

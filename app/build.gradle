@@ -32,4 +32,7 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile project(path: ':injectutils')
     compile project(':modelone')
+    compile project(':stat')
+
+    compile deps.logger
 }

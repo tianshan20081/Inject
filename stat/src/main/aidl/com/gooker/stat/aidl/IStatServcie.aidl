@@ -13,5 +13,6 @@ interface IStatServcie {
 
             void upload(String content);
             void saveData(String content);
+            void init();
 
 }

@@ -25,12 +25,12 @@ public class App extends Application {
 
             @Override
             public void d(Object obj) {
-                LogUtils.i(obj);
+                LogUtils.d(obj);
             }
 
             @Override
             public void e(Object obj) {
-                LogUtils.i(obj);
+                LogUtils.e(obj);
             }
         });
     }

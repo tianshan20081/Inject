@@ -14,9 +14,11 @@ import com.gooker.stat.utils.Logger;
 public class AppEvent {
     private static Context mContext;
     private static Logger mLogger;
+    private static ClickEventHelper mClickEventHelper;
 
     public static void init(Context context) {
         mContext = context;
+        mClickEventHelper = ClickEventHelper.getInstance(mContext);
     }
 
     public static void setLogAdapter(LogAdapter logAdapter) {
@@ -28,7 +30,7 @@ public class AppEvent {
 
     public static void onResume(Activity activity) {
         if (null != activity) {
-            
+
         }
     }
 
@@ -38,5 +40,10 @@ public class AppEvent {
 
     public static void onStop(Activity activity) {
 
+    }
+
+    public static void onEvent(String data) {
+        Logger.e(data);
+        mClickEventHelper.sendEventData(data);
     }
 }

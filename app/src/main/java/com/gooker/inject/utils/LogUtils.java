@@ -28,4 +28,20 @@ public class LogUtils {
         }
     }
 
+    public static void d(Object obj) {
+        if (Utils.isDebug()) {
+            if (null != obj) {
+                Logger.d(obj.toString());
+            }
+        }
+    }
+
+    public static void e(Object obj) {
+        if (Utils.isDebug()) {
+            if (null != obj) {
+                Logger.e(obj.toString());
+            }
+        }
+    }
+
 }

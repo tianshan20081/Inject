@@ -21,16 +21,22 @@ public class RemoteStatService extends Service {
         @Override
         public void basicTypes(int anInt, long aLong, boolean aBoolean, float aFloat, double aDouble, String aString) throws RemoteException {
 
+            Logger.e(Thread.currentThread().getName() + Thread.currentThread().getStackTrace()[0]);
+
+            Logger.e("basicTypes------------:");
         }
 
         @Override
         public void upload(String content) throws RemoteException {
+            Logger.e(Thread.currentThread().getName() + Thread.currentThread().getStackTrace()[0]);
 
+            Logger.e("basicTypes------------:");
         }
 
         @Override
         public void saveData(String content) throws RemoteException {
-
+            Logger.e(Thread.currentThread().getName() + Thread.currentThread().getStackTrace()[0]);
+            Logger.e("saveData------------:\t" + content);
         }
 
         @Override
@@ -40,28 +46,25 @@ public class RemoteStatService extends Service {
     };
 
     public RemoteStatService() {
-
+        Logger.e("RemoteStatService()");
     }
 
     @Override
     public IBinder onBind(Intent intent) {
+        Logger.e("RemoteStatService()\t:onBind");
         return mBinder;
     }
 
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        if (null != intent) {
-            switch (intent.getAction()) {
-                case _INIT_DEVICE:
-                    try {
-                        mBinder.init();
-                    } catch (RemoteException e) {
-                        e.printStackTrace();
-                    }
-                    break;
+    public void onRebind(Intent intent) {
+        super.onRebind(intent);
+        Logger.e("RemoteStatService()\t:onRebind");
+    }
 
-            }
-        }
-        return super.onStartCommand(intent, flags, startId);
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        super.onStartCommand(intent, flags, startId);
+        Logger.e("RemoteStatService()\t:onStartCommand");
+        return START_REDELIVER_INTENT;
     }
 }

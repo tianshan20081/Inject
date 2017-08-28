@@ -2,6 +2,11 @@
 <manifest package="com.gooker.inject"
           xmlns:android="http://schemas.android.com/apk/res/android">
 
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
     <application
         android:name=".app.App"
         android:allowBackup="true"
@@ -19,6 +24,7 @@
         </activity>
         <activity android:name=".bi.BiHomeActivity"/>
         <activity android:name=".views.ui.TouchPullViewActivity"/>
+        <activity android:name=".appwifi.AppWifiActivity"/>
         <activity android:name=".views.ui.BezierLineActivity"/>
     </application>
 

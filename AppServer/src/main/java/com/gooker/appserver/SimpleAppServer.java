@@ -2,12 +2,13 @@ package com.gooker.appserver;
 
 import android.util.Log;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -23,10 +24,17 @@ public class SimpleAppServer {
     private boolean isRunning;
     private ServerSocket mServerSocket;
 
-    private ExecutorService mThreadPoolExecutor = Executors.newCachedThreadPool();
+    private Set<IUrlResourceHandle> urlResourceHandles;
+
+    private ExecutorService mThreadPoolExecutor;
 
     public SimpleAppServer(ServerConfig serverConfig) {
         this.mServerConfig = serverConfig;
+        mThreadPoolExecutor = Executors.newCachedThreadPool();
+        urlResourceHandles = new HashSet<>();
+
+        urlResourceHandles.add(new StaticIUrlResourceHandle());
+        urlResourceHandles.add(new UploadIUrlResourceHandle());
     }
 
     public void startServer() {
@@ -38,21 +46,16 @@ public class SimpleAppServer {
 
         try {
             InetSocketAddress inetSocketAddress = new InetSocketAddress(mServerConfig.getPort());
-            Log.e("ip", inetSocketAddress.getAddress().getHostAddress());
-            Log.e("ip", inetSocketAddress.getPort() + "");
             mServerSocket = new ServerSocket();
             mServerSocket.bind(inetSocketAddress);
             while (isRunning) {
-                final Socket accept = mServerSocket.accept();
+                final Socket remotePeer = mServerSocket.accept();
                 mThreadPoolExecutor.submit(new Runnable() {
                     @Override
                     public void run() {
-                        try {
-                            String msg = StreamUtils.readLine(accept.getInputStream());
-                            Log.e("msg", msg);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+
+                        Log.e("msg", remotePeer.getRemoteSocketAddress().toString());
+                        onAcceptRemoteSocket(remotePeer);
                     }
                 });
             }
@@ -62,19 +65,38 @@ public class SimpleAppServer {
         }
     }
 
-    private String getSocketInfo(InputStream inputStream) {
-        StringBuilder stringBuilder = new StringBuilder();
-        int data;
-        byte[] b = new byte[1024];
+    private void onAcceptRemoteSocket(Socket remotePeer) {
         try {
-            while ((data = inputStream.read(b)) != -1) {
-                stringBuilder.append(new String(b));
+            HttpContext httpContext = new HttpContext();
+            httpContext.setContext(remotePeer);
+            InputStream nis = remotePeer.getInputStream();
+
+            String resourceUrl = StreamUtils.readLine(nis).split(" ")[1];
+            Log.e("url", resourceUrl);
+
+            String headLine = null;
+            while ((headLine = StreamUtils.readLine(nis)) != null) {
+                if (headLine.equals("\r\n")) {
+                    break;
+                }
+                Log.e("msg", headLine);
+                String[] split = headLine.split(": ");
+                if (split.length > 1) {
+                    httpContext.addHeader(split[0], split[1]);
+                }
             }
-            return stringBuilder.toString();
+
+
+            for (IUrlResourceHandle urlResourceHandle : urlResourceHandles) {
+                if (urlResourceHandle.accept(resourceUrl)) {
+                    urlResourceHandle.handle(resourceUrl, httpContext);
+                    break;
+                }
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return "";
     }
 
 

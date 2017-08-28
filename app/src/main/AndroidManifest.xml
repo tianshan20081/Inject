@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.gooker.inject">
+<manifest package="com.gooker.inject"
+          xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application
         android:name=".app.App"
@@ -19,7 +19,7 @@
         </activity>
         <activity android:name=".bi.BiHomeActivity"/>
         <activity android:name=".views.ui.TouchPullViewActivity"/>
-
+        <activity android:name=".views.ui.BezierLineActivity"/>
     </application>
 
 </manifest>

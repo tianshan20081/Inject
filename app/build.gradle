@@ -17,6 +17,76 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    signingConfigs {
+        debug
+
+        //指定名叫release的一个签名对象 会在下面的脚本(85行开始)中，动态根据配置文件设置属性
+        release
+    }
+
+
+
+    buildTypes {
+        debug {
+
+            buildConfigField "boolean", "IS_DEBUG", "true"
+            //设置是否混淆
+            minifyEnabled false
+            //设置压缩对齐
+            zipAlignEnabled false
+            //移除无用的资源文件
+            shrinkResources false
+            //设置混淆配置文件
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+
+            if (signingConfigs.debug != null) {
+//                signingConfig signingConfigs.debug
+                signingConfig signingConfigs.release
+            }
+
+//            manifestPlaceholders = [
+//                    JPUSH_APPKEY: "695e80fbbdb761a1be1b6a48", //JPush上注册的包名对应的appkey.
+//            ]
+
+        }
+        release {
+            buildConfigField "boolean", "IS_DEBUG", "false"
+            //设置是否混淆
+            minifyEnabled false
+            //设置压缩对齐
+            zipAlignEnabled false
+            //移除无用的资源文件
+            shrinkResources false
+            //设置混淆配置文件
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            //如果签名配置不为空 则设置签名信息
+            if (signingConfigs.release != null) {
+                signingConfig signingConfigs.release
+            }
+//
+//            manifestPlaceholders = [
+//                    JPUSH_APPKEY: "0fd186535f13b229fe7d05df", //JPush上注册的包名对应的appkey.
+//            ]
+
+        }
+    }
+
+
+    android.applicationVariants.all { variant ->
+        variant.outputs.each { output ->
+            def outputFile = output.outputFile
+            def fileName
+            if (outputFile != null && outputFile.name.endsWith('.apk')) {
+                if (!outputFile.name.contains('unaligned')) {
+                    fileName = "Inject_${defaultConfig.versionName}_${variant.buildType.name}.apk"
+                    output.outputFile = new File(outputFile.parent + "/aligned", fileName)
+                }
+            }
+        }
+    }
 }
 
 dependencies {
@@ -39,3 +109,34 @@ dependencies {
     compile deps.rxJava
     compile deps.rxAndroid
 }
+
+
+def Properties prop = new Properties()
+//def File propFile = file('/Users/sczhang/dev/android/keys/hgl.properties')
+def File propFile = file('/Users/mz/dev/android/keys/hgl.properties')
+if (!propFile.exists() || !propFile.canRead()) {
+    propFile = file('/Users/sczhang/dev/android/keys/hgl.properties')
+}
+if (propFile.exists() && propFile.canRead()) {
+    prop.load(new FileInputStream(propFile))
+    if (null != prop && prop.containsKey('STORE_FILE') && prop.containsKey('STORE_PWD') && prop.containsKey('KEY_ALIAS') && prop.containsKey('KEY_PWD')) {
+        android.signingConfigs.release.storeFile = file(prop['STORE_FILE'])
+        android.signingConfigs.release.storePassword = prop.getProperty('STORE_PWD')
+
+        android.signingConfigs.release.keyAlias = prop['KEY_ALIAS']
+        android.signingConfigs.release.keyPassword = prop['KEY_PWD']
+
+        android.signingConfigs.debug.storeFile = file(prop['STORE_FILE'])
+        android.signingConfigs.debug.storePassword = prop.getProperty('STORE_PWD')
+
+        android.signingConfigs.debug.keyAlias = prop['KEY_ALIAS_DEV']
+        android.signingConfigs.debug.keyPassword = prop['KEY_PWD_DEV']
+    } else {
+        android.signingConfigs.release = null
+        android.signingConfigs.debug = null
+    }
+} else {
+//    android.signingConfigs.release = null
+//    android.signingConfigs.debug = null
+}
+

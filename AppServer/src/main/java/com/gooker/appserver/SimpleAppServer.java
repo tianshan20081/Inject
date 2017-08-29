@@ -21,7 +21,7 @@ public class SimpleAppServer {
 
 
     private final ServerConfig mServerConfig;
-    private boolean isRunning;
+    private volatile boolean isRunning;
     private ServerSocket mServerSocket;
 
     private Set<IUrlResourceHandle> urlResourceHandles;
@@ -32,9 +32,6 @@ public class SimpleAppServer {
         this.mServerConfig = serverConfig;
         mThreadPoolExecutor = Executors.newCachedThreadPool();
         urlResourceHandles = new HashSet<>();
-
-        urlResourceHandles.add(new StaticIUrlResourceHandle());
-        urlResourceHandles.add(new UploadIUrlResourceHandle());
     }
 
     public void startServer() {
@@ -96,6 +93,13 @@ public class SimpleAppServer {
 
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                remotePeer.close();
+                remotePeer = null;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -105,5 +109,15 @@ public class SimpleAppServer {
             return;
         }
         isRunning = false;
+        try {
+            mServerSocket.close();
+            mServerSocket = null;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void addResourceHandle(IUrlResourceHandle urlResourceHandle) {
+        urlResourceHandles.add(urlResourceHandle);
     }
 }

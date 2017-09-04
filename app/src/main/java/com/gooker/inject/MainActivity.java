@@ -5,9 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import com.gooker.inject.appwifi.AppWifiActivity;
 import com.gooker.inject.bi.BiHomeActivity;
-import com.gooker.inject.views.ui.BezierLineActivity;
+import com.gooker.inject.handlethread.HandleThreadActivity;
 import com.gooker.inject.views.ui.TouchPullViewActivity;
 import com.gooker.modelone.action.TestAction;
 
@@ -86,7 +85,8 @@ public class MainActivity extends Activity {
 
                     @Override
                     public void onNext(Long aLong) {
-                        startActivity(new Intent(MainActivity.this, AppWifiActivity.class));
+                        startActivity(new Intent(MainActivity.this, HandleThreadActivity.class));
+//                        startActivity(new Intent(MainActivity.this, AppWifiActivity.class));
 //                        startActivity(new Intent(MainActivity.this, TouchPullViewActivity.class));
 //                        startActivity(new Intent(MainActivity.this, TouchPullViewActivity.class));
 //                        startActivity(new Intent(MainActivity.this, BezierLineActivity.class));

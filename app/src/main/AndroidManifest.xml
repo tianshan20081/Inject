@@ -24,7 +24,9 @@
         <activity android:name=".views.ui.TouchPullViewActivity"/>
         <activity android:name=".appwifi.AppWifiActivity"/>
         <activity android:name=".views.ui.BezierLineActivity"/>
-        <activity android:name=".handlethread.HandleThreadActivity">
+        <activity android:name=".handlethread.HandleThreadActivity"/>
+        <activity android:name=".aidl.AidlHomeActivity"/>
+        <activity android:name=".aidl.MessengerHomeActivity">
         </activity>
     </application>
 

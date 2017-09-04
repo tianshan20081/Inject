@@ -104,6 +104,7 @@ dependencies {
     compile project(':stat')
     compile project(':views')
     compile project(':AppServer')
+    compile project(':AIDL')
 
     compile deps.logger
 
